@@ -2,8 +2,10 @@
 import { headers } from 'next/headers';
 import { getCertificateData } from '@/lib/sheets';   // <-- alias import (see step 3)
 
+export const runtime = 'nodejs';     // <— force Node runtime on Vercel
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
 
 const nl2br = s => String(s || '').replace(/\r\n|\r|\n/g, '<br>');
 const esc = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c]));
