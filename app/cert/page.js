@@ -107,3 +107,22 @@ function Card({ state='info', title, message, details=null, courseLong=null }) {
     </div>
   );
 }
+// call this after content renders and whenever content height might change
+function postSize() {
+  const height = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight
+  );
+  // Limit targetOrigin to your Wix site for security
+  window.parent?.postMessage(
+    { type: 'cert-embed:resize', height },
+    'https://www.ppsconsulting.biz'
+  );
+}
+
+// run on load and on layout changes
+window.addEventListener('load', postSize);
+
+// optional: resync if content changes
+const ro = new ResizeObserver(postSize);
+ro.observe(document.body);
