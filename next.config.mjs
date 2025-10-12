@@ -1,33 +1,31 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
-    // IMPORTANT: allow your Wix site & your domain to frame this app
+    // Allow embedding by your Wix site + Wix wrapper iframes
     const FRAME_ANCESTORS = [
       "https://ppsconsulting.biz",
       "https://www.ppsconsulting.biz",
       "https://*.wixsite.com",
-      "https://*.editorx.io"
+      "https://*.editorx.io",
+      "https://*.wix.com",
+      "https://*.wixstatic.com",
+      "https://static.parastorage.com",
+      "https://*.parastorage.com"
     ].join(' ');
 
     return [
       {
         source: "/:path*",
         headers: [
-          // Explicitly allow being embedded by your Wix domain
           {
             key: "Content-Security-Policy",
             value: `frame-ancestors ${FRAME_ANCESTORS};`
           },
-          // Some proxies/browsers still honor X-Frame-Options
-          // ALLOWALL is non-standard but effectively removes the block in engines that still default
-          { key: "X-Frame-Options", value: "ALLOWALL" },
-
-          // Optional hardening
-          { key: "X-Content-Type-Options", value: "nosniff" },
+          // REMOVE X-Frame-Options entirely; CSP is the modern control.
+          // Some stacks treat unknown values like ALLOWALL as invalid and fallback to blocking.
+          { key: "Cache-Control", value: "no-store" },
           { key: "Referrer-Policy", value: "no-referrer" },
-
-          // Avoid caching verification results
-          { key: "Cache-Control", value: "no-store" }
+          { key: "X-Content-Type-Options", value: "nosniff" }
         ]
       }
     ];
