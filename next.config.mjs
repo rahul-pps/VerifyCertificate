@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
-    // Allow embedding by your Wix site + Wix wrapper iframes
     const FRAME_ANCESTORS = [
       "https://ppsconsulting.biz",
       "https://www.ppsconsulting.biz",
@@ -21,8 +20,8 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: `frame-ancestors ${FRAME_ANCESTORS};`
           },
-          // REMOVE X-Frame-Options entirely; CSP is the modern control.
-          // Some stacks treat unknown values like ALLOWALL as invalid and fallback to blocking.
+          // ⛔ Explicitly override any legacy X-Frame-Options from Next/Vercel
+          { key: "X-Frame-Options", value: "" },
           { key: "Cache-Control", value: "no-store" },
           { key: "Referrer-Policy", value: "no-referrer" },
           { key: "X-Content-Type-Options", value: "nosniff" }
